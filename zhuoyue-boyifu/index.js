@@ -16,8 +16,8 @@ import cron from 'node-cron';
  * 一个总的exls file，每天一个sheet。
  */
 // 每天晚上8点定时触发
-// cron.schedule('0 20 * * *', async function cronTask (){
-cron.schedule('*/5 * * * *', async function cronTask (){
+cron.schedule('0 20 * * *', async function cronTask (){
+// cron.schedule('*/5 * * * *', async function cronTask (){
   let jsonData = await getAllSellingInfos();
   
   console.log('all data::', JSON.stringify(jsonData, null, 2));
