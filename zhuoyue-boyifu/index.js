@@ -15,9 +15,7 @@ import cron from 'node-cron';
 /**
  * 一个总的exls file，每天一个sheet。
  */
-// 每天晚上8点定时触发
-cron.schedule('0 20 * * *', async function cronTask (){
-// cron.schedule('*/5 * * * *', async function cronTask (){
+const cronTask = async function () {
   let jsonData = await getAllSellingInfos();
   
   console.log('all data::', JSON.stringify(jsonData, null, 2));
@@ -71,7 +69,11 @@ cron.schedule('0 20 * * *', async function cronTask (){
   // 设置表头样式和列宽
   const worksheet = workbook.Sheets[sheetName];
   const headerStyle = { fill: { bgColor: { rgb: 'CCC' } } };
-  const columnWidths = new Array(20).fill({ wpx: 120 }); //[{ wpx: 100 }, { wpx: 80 }, { wpx: 120 }];
+  const columnWidths = [
+    50/*A:id*/, 10, 50/*C:楼栋*/, 10, 50/*E:楼层*/, 50/*F:房号*/, 100/*G:用途*/, 80/*H:套内*/, 80/*I:公摊*/, 
+    100/*J:建面*/, 0, 1, 5, 100/*N:单价*/,10, 10, 100/*Q:销售状态*/, 20/*R:备案字*/, 100/*S:总价*/, 100/*T:使用率*/
+  ].map(width => ({ wpx: width }));
+  // const columnWidths = new Array(20).fill({ wpx: 120 });
 
   for (const cell in worksheet) {
     if (cell[1] === '1') {
@@ -83,4 +85,9 @@ cron.schedule('0 20 * * *', async function cronTask (){
 
   // 将工作簿写入文件
   XLSX.writeFile(workbook, ExcelFileName);
-});
+}
+// 每天晚上6点定时触发
+// cron.schedule('0 18 * * *', cronTask);
+// 每5分钟触发一次
+// cron.schedule('*/5 * * * *', cronTask);
+cronTask();
