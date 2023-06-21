@@ -91,7 +91,7 @@ const cronTask = async function () {
   console.log(`git push ${(hadPushToGit ? "成功" : "失败")}. - ${new Date().toLocaleString()}`);
 }
 // [+]每天晚上定时触发
-cron.schedule('0 19 * * *', cronTask);
+cron.schedule('0 20 * * *', cronTask);
 
 // [+]每5分钟触发一次
 // cron.schedule('*/5 * * * *', cronTask);
