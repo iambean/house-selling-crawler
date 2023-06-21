@@ -90,8 +90,8 @@ const cronTask = async function () {
   const hadPushToGit = await gitPush(`${sheetName}# 自动生成.`);
   console.log(`git push ${(hadPushToGit ? "成功" : "失败")}. - ${new Date().toLocaleString()}`);
 }
-// [+]每天晚上6点定时触发
-cron.schedule('0 18 * * *', cronTask);
+// [+]每天晚上定时触发
+cron.schedule('0 19 * * *', cronTask);
 
 // [+]每5分钟触发一次
 // cron.schedule('*/5 * * * *', cronTask);
