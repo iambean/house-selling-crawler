@@ -87,11 +87,14 @@ const cronTask = async function () {
   // 将工作簿写入文件
   XLSX.writeFile(workbook, ExcelFilePath);
 
-  const hadPushToGit = await gitPush(`${sheetName}# 生成！`);
-  console.log("git push " + (hadPushToGit ? "成功" : "失败"));
+  const hadPushToGit = await gitPush(`${sheetName}# 自动生成.`);
+  console.log(`git push ${(hadPushToGit ? "成功" : "失败")}. - ${new Date().toLocaleString()}`);
 }
-// 每天晚上6点定时触发
-// cron.schedule('0 18 * * *', cronTask);
-// 每5分钟触发一次
+// [+]每天晚上6点定时触发
+cron.schedule('0 18 * * *', cronTask);
+
+// [+]每5分钟触发一次
 // cron.schedule('*/5 * * * *', cronTask);
-cronTask();
+
+// [+]立即执行
+// cronTask();
