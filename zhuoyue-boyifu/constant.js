@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 /**
  * 字段名和Excel表头显示名映射，最终还是直接用字段名了。
  */
@@ -24,4 +26,10 @@ export const ColumnsDefined = [
   ["strcontractid"]
 ];
 
-export const ExcelFileName = './柏奕府销售表.xlsx'
+const currentFileUrl = import.meta.url;
+const currentFilePath = fileURLToPath(currentFileUrl);
+const currentDirectory = dirname(currentFilePath);
+
+export const ExcelFilePath = resolve(currentDirectory, './柏奕府销售表.xlsx');
+
+console.log('当前模块的目录:', ExcelFilePath);

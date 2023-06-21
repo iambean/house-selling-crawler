@@ -5,7 +5,8 @@ import XLSX from 'xlsx';
 import fs from 'fs';
 
 import { getAllSellingInfos } from './api.js'
-import { ColumnsDefined, ExcelFileName } from './constant.js';
+import { ColumnsDefined, ExcelFilePath } from './constant.js';
+import { gitPush } from './git.js';
 
 import cron from 'node-cron';
 
@@ -23,13 +24,13 @@ const cronTask = async function () {
   const sheetName = (new Date()).toLocaleDateString().replaceAll('/', '.');
 
   // 判断文件是否存在
-  const fileExists = fs.existsSync(ExcelFileName);
+  const fileExists = fs.existsSync(ExcelFilePath);
 
   let workbook;
 
   if (fileExists) {
     // 读取现有的工作簿
-    workbook = XLSX.readFile(ExcelFileName);
+    workbook = XLSX.readFile(ExcelFilePath);
 
     // 判断是否存在指定的表
     const sheetExists = workbook.SheetNames.includes(sheetName);
@@ -84,7 +85,10 @@ const cronTask = async function () {
   worksheet['!cols'] = columnWidths;
 
   // 将工作簿写入文件
-  XLSX.writeFile(workbook, ExcelFileName);
+  XLSX.writeFile(workbook, ExcelFilePath);
+
+  const hadPushToGit = await gitPush(`${sheetName}# 生成！`);
+  console.log("git push " + (hadPushToGit ? "成功" : "失败"));
 }
 // 每天晚上6点定时触发
 // cron.schedule('0 18 * * *', cronTask);
