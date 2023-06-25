@@ -19,7 +19,8 @@ import cron from 'node-cron';
 const cronTask = async function () {
   let jsonData = await getAllSellingInfos();
   
-  console.log('all data::', JSON.stringify(jsonData, null, 2));
+  // console.log('all data::', JSON.stringify(jsonData, null, 2));
+  console.log('all data size:', jsonData.length);
 
   const sheetName = (new Date()).toLocaleDateString().replaceAll('/', '.');
 
