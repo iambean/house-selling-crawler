@@ -96,5 +96,5 @@ const cronTask = async function () {
 // [+]每5分钟触发一次
 // cron.schedule('*/5 * * * *', cronTask);
 
-// [+]立即执行
+// [+]立即执行，在Github上利用github actions的schedule去配置定时执行
 cronTask();
