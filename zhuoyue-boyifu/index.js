@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import { getAllSellingInfos } from './api.js'
 import { ColumnsDefined, ExcelFilePath } from './constant.js';
-import { gitPush } from './git.js';
+import { pushToGithubServer } from './github.js';
 
 import cron from 'node-cron';
 
@@ -88,7 +88,7 @@ const cronTask = async function () {
   // 将工作簿写入文件
   XLSX.writeFile(workbook, ExcelFilePath);
 
-  const hadPushToGit = await gitPush(`${sheetName}# 自动生成.`);
+  const hadPushToGit = await pushToGithubServer(`${sheetName}# 自动生成.`);
   console.log(`git push ${(hadPushToGit ? "成功" : "失败")}. - ${new Date().toLocaleString()}`);
 }
 // [+]每天晚上定时触发
