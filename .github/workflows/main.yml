@@ -1,8 +1,8 @@
-name: GitHub Actions 定时任务 - 每晚定时爬取并提交github
+name: GitHub Actions 定时任务 - 每晚定时爬取并保存到Ali cloud上
 
 on:
   schedule:
-    - cron: '0 10 * * 6' # 每天的 UTC 00:00 执行
+    - cron: '0 18 * * 6' # 每天的 UTC 00:00 执行
 
 jobs:
   run_script:
@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          ref: deploy-on-github-actions
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -24,5 +22,3 @@ jobs:
 
       - name: Run script
         run: node zhuoyue-boyifu/index.js
-
-
