@@ -57,7 +57,7 @@ async function getBuildings(buildingNum){
           house['totalPrice'] = totalPrice;
           house['discountedPrice'] = totalPrice * (0.99 ** 15).toFixed(4);
           // 面积数值调整
-          house['ysbuildingarea'] = Math.round(totalAreaSize);
+          // house['ysbuildingarea'] = Math.round(totalAreaSize);
           return house;
           // return _.pick(house, ColumnsDefined.map(item => item[0]));
         })
