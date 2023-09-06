@@ -45,14 +45,19 @@ async function getBuildings(buildingNum){
       return [];
     }
     const items = content.data.map(floorItem =>
-      floorItem.list.map(house => {
-        let totalPrice = house['askpriceeachB'] * house['ysbuildingarea'] / 1e4;
-        house['useRate'] = (house['ysinsidearea'] / house['ysbuildingarea'] * 100).toFixed(4) + '%';
-        house['totalPrice'] = totalPrice;
-        house['discountedPrice'] = totalPrice * (0.99 ** 15).toFixed(4);
-        return house;
-        // return _.pick(house, ColumnsDefined.map(item => item[0]));
-      })
+      floorItem.list
+        .filter(house => {
+          console.log(house, house.useage === " 住宅")
+          return house => house.useage === " 住宅";
+        })
+        .map(house => {
+          let totalPrice = house['askpriceeachB'] * house['ysbuildingarea'] / 1e4;
+          house['useRate'] = (house['ysinsidearea'] / house['ysbuildingarea'] * 100).toFixed(4) + '%';
+          house['totalPrice'] = totalPrice;
+          house['discountedPrice'] = totalPrice * (0.99 ** 15).toFixed(4);
+          return house;
+          // return _.pick(house, ColumnsDefined.map(item => item[0]));
+        })
     );
     return items.flat()
   }catch(e){

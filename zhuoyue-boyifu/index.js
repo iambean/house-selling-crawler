@@ -17,7 +17,7 @@ import cron from 'node-cron';
  * 一个总的exls file，每天一个sheet。
  */
 const cronTask = async function () {
-  let jsonData = await getAllSellingInfos();
+  let jsonData = await getAllSellingInfos({});
   
   // console.log('all data::', JSON.stringify(jsonData, null, 2));
   console.log('all data size:', jsonData.length);
