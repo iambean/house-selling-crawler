@@ -47,8 +47,8 @@ async function getBuildings(buildingNum){
     const items = content.data.map(floorItem =>
       floorItem.list
         .filter(house => {
-          console.log(house, house.useage === " 住宅")
-          return house => house.useage === " 住宅";
+          // console.log(house, house.useage === "住宅")
+          return house.useage === "住宅";
         })
         .map(house => {
           let totalPrice = house['askpriceeachB'] * house['ysbuildingarea'] / 1e4;
