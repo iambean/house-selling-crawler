@@ -51,10 +51,13 @@ async function getBuildings(buildingNum){
           return house.useage === "住宅";
         })
         .map(house => {
-          let totalPrice = house['askpriceeachB'] * house['ysbuildingarea'] / 1e4;
-          house['useRate'] = (house['ysinsidearea'] / house['ysbuildingarea'] * 100).toFixed(4) + '%';
+          let totalAreaSize = house['ysbuildingarea'] * 1;
+          let totalPrice = house['askpriceeachB'] * totalAreaSize / 1e4;
+          house['useRate'] = (house['ysinsidearea'] / totalAreaSize * 100).toFixed(4) + '%';
           house['totalPrice'] = totalPrice;
           house['discountedPrice'] = totalPrice * (0.99 ** 15).toFixed(4);
+          // 面积数值调整
+          house['ysbuildingarea'] = Math.round(totalAreaSize);
           return house;
           // return _.pick(house, ColumnsDefined.map(item => item[0]));
         })
