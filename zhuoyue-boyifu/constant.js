@@ -26,10 +26,17 @@ export const ColumnsDefined = [
   ["strcontractid"]
 ];
 
-const currentFileUrl = import.meta.url;
-const currentFilePath = fileURLToPath(currentFileUrl);
-const currentDirectory = dirname(currentFilePath);
+export const ExcelFilePath = resolve((function(){
+  const currentFileUrl = import.meta.url;
+  const currentFilePath = fileURLToPath(currentFileUrl);
+  return dirname(currentFilePath);
+})(), './柏奕府销售表.xlsx');
 
-export const ExcelFilePath = resolve(currentDirectory, './柏奕府销售表.xlsx');
+export const GITHUB_CONFIG = {
+  // 如果在github actions 运行环境，用户名密码从环境中读取
+  Name : process.env.GIT_HUB_NAME,
+  Password : process.env.GIT_HUB_PASSWORD,
+  
+  AuthUrl: "https://api.github.com/authorizations",
 
-console.log('当前模块的目录:', ExcelFilePath);
+}

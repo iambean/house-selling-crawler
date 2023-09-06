@@ -1,0 +1,30 @@
+name: GitHub Actions 定时任务 - 每晚定时爬取并提交github
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # 每天的 UTC 00:00 执行
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.9.0
+
+      - name: Install dependencies
+        run: yarn
+      
+      - name: Set up environment variables
+        run: |
+          echo "MY_VARIABLE=${{ env.GIT_HUB_NAME }}" >> $GITHUB_ENV
+          echo "MY_SECRET=${{ secrets.GIT_HUB_PASSWORD }}" >> $GITHUB_ENV
+          
+      - name: Run script
+        run: node zhuoyue-boyifu/index.js
+

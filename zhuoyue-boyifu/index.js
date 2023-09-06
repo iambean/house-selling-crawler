@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import { getAllSellingInfos } from './api.js'
 import { ColumnsDefined, ExcelFilePath } from './constant.js';
-import { gitPush } from './git.js';
+import { pushToGithubServer } from './github.js';
 
 import cron from 'node-cron';
 
@@ -19,7 +19,8 @@ import cron from 'node-cron';
 const cronTask = async function () {
   let jsonData = await getAllSellingInfos();
   
-  console.log('all data::', JSON.stringify(jsonData, null, 2));
+  // console.log('all data::', JSON.stringify(jsonData, null, 2));
+  console.log('all data size:', jsonData.length);
 
   const sheetName = (new Date()).toLocaleDateString().replaceAll('/', '.');
 
@@ -72,7 +73,8 @@ const cronTask = async function () {
   const headerStyle = { fill: { bgColor: { rgb: 'CCC' } } };
   const columnWidths = [
     50/*A:id*/, 10, 50/*C:楼栋*/, 10, 50/*E:楼层*/, 50/*F:房号*/, 100/*G:用途*/, 80/*H:套内*/, 80/*I:公摊*/, 
-    100/*J:建面*/, 0, 1, 5, 100/*N:单价*/,10, 10, 100/*Q:销售状态*/, 20/*R:备案字*/, 100/*S:总价*/, 100/*T:使用率*/
+    100/*J:建面*/, 0, 1, 5, 100/*N:单价*/,10, 10, 100/*Q:销售状态*/, 20/*R:备案字*/, 100/*S:使用率*/, 100/*T:总价*/,
+    100/*U:86折后价*/
   ].map(width => ({ wpx: width }));
   // const columnWidths = new Array(20).fill({ wpx: 120 });
 
@@ -87,7 +89,7 @@ const cronTask = async function () {
   // 将工作簿写入文件
   XLSX.writeFile(workbook, ExcelFilePath);
 
-  const hadPushToGit = await gitPush(`${sheetName}# 自动生成.`);
+  const hadPushToGit = await pushToGithubServer(`${sheetName}# 自动生成.`);
   console.log(`git push ${(hadPushToGit ? "成功" : "失败")}. - ${new Date().toLocaleString()}`);
 }
 // [+]每天晚上定时触发
@@ -96,5 +98,5 @@ const cronTask = async function () {
 // [+]每5分钟触发一次
 // cron.schedule('*/5 * * * *', cronTask);
 
-// [+]立即执行
+// [+]立即执行，在Github上利用github actions的schedule去配置定时执行
 cronTask();

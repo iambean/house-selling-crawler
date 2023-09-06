@@ -46,8 +46,10 @@ async function getBuildings(buildingNum){
     }
     const items = content.data.map(floorItem =>
       floorItem.list.map(house => {
-        house['totalPrice'] = house['askpriceeachB'] * house['ysbuildingarea'] / 1e4;
+        let totalPrice = house['askpriceeachB'] * house['ysbuildingarea'] / 1e4;
         house['useRate'] = (house['ysinsidearea'] / house['ysbuildingarea'] * 100).toFixed(4) + '%';
+        house['totalPrice'] = totalPrice;
+        house['discountedPrice'] = totalPrice * (0.99 ** 15).toFixed(4);
         return house;
         // return _.pick(house, ColumnsDefined.map(item => item[0]));
       })
