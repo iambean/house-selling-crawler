@@ -1,4 +1,4 @@
-name: GitHub Actions 定时任务 - 每晚定时爬取并保存到Ali cloud上
+name: 每天爬取并push 到 github 分支/auto-gen-xlsx上
 
 on:
   schedule:
