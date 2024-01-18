@@ -89,8 +89,8 @@ const cronTask = async function () {
   // 将工作簿写入文件
   XLSX.writeFile(workbook, ExcelFilePath);
 
-  const hadPushToGit = await pushToGithubServer(`${sheetName}# 自动生成.`);
-  console.log(`git push ${(hadPushToGit ? "成功" : "失败")}. - ${new Date().toLocaleString()}`);
+  const hadPushToGithub = await pushToGithubServer(`${sheetName}# 自动生成.`);
+  console.log(`git push ${(hadPushToGithub ? "成功" : "失败")}. - ${new Date().toLocaleString()}`);
 }
 // [+]每天晚上定时触发
 // cron.schedule('0 20 * * *', cronTask);

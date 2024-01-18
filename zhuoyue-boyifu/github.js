@@ -1,7 +1,7 @@
 import request from "superagent";
 import { exec } from 'child_process';
-import { promisify } from 'util';
-const execPromise = promisify(exec);
+// import { promisify } from 'util';
+// const execPromise = promisify(exec);
 
 import { GITHUB_CONFIG } from './constant.js'
 
@@ -31,8 +31,8 @@ async function commitAndPush (token) {
 
 export async function pushToGithubServer (message) {
   // 如果在github actions环境，则需要用github rest api进行commit & push； 否则在本地运行git命令；
-  const IsInGithubEnv = (process.env.CI === 'true' && process.env.GITHUB_ACTIONS === 'true');
-  if(IsInGithubEnv){
+  const IsInGithubAction = (process.env.CI === 'true' && process.env.GITHUB_ACTIONS === 'true');
+  if(IsInGithubAction){
     const token = await loginAndGetToken();
     if(token === false){
       return false;
@@ -40,14 +40,14 @@ export async function pushToGithubServer (message) {
       await commitAndPush(token);
     }
   }else{
-    try{
-      await execPromise('git add .');
-      await execPromise(`git commit -m "${message}"`);
-      await execPromise('git push');
-      return true;
-    }catch(e){
-      console.log('git 操作出错,', e);
-      return false;
-    }
+    // try{
+    //   await execPromise('git add .');
+    //   await execPromise(`git commit -m "${message}"`);
+    //   await execPromise('git push');
+    //   return true;
+    // }catch(e){
+    //   console.log('git 操作出错,', e);
+    //   return false;
+    // }
   }
 }
