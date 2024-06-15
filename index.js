@@ -1,14 +1,26 @@
 'use strict';
 
 // import ExcelJS from 'exceljs';
-import XLSX from 'xlsx';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-import { getAllSellingInfos } from './api.js'
-import { ColumnsDefined, ExcelFilePath } from './constant.js';
+import XLSX from 'xlsx';
+
+import { getAllSellingInfos, getProjectSellingDetails } from './api.js';
+import { getExcelOutputPath } from './util.js';
+import { ProjNameMap, ColumnsDefined } from './constant.js';
 import { pushToGithubServer } from './github.js';
 
 import cron from 'node-cron';
+
+const projName = process.argv[2];
+if(projName && (projName in ProjNameMap)){
+  global.projName = projName;
+  global.projInfo = ProjNameMap[projName]
+}else{
+  throw new Error('need project name param, e.g: 【node index.js byf】');
+}
 
 // const SheetColumns = ColumnsDefined.map(item => (item[1] ?? item[0]));
 // const SheetColumns = ColumnsDefined.map(item => item[0]);
@@ -17,21 +29,24 @@ import cron from 'node-cron';
  * 一个总的exls file，每天一个sheet。
  */
 const cronTask = async function () {
-  let jsonData = await getAllSellingInfos({});
+  // let jsonData = await getAllSellingInfos({});
+  let jsonData = await getProjectSellingDetails();
+
+  const excelFile = await getExcelOutputPath();
   
   // console.log('all data::', JSON.stringify(jsonData, null, 2));
   console.log('all data size:', jsonData.length);
 
   const sheetName = (new Date()).toLocaleDateString().replaceAll('/', '.');
 
-  // 判断文件是否存在
-  const fileExists = fs.existsSync(ExcelFilePath);
-
   let workbook;
+
+  // 判断文件是否存在
+  const fileExists = fs.existsSync(excelFile);
 
   if (fileExists) {
     // 读取现有的工作簿
-    workbook = XLSX.readFile(ExcelFilePath);
+    workbook = XLSX.readFile(excelFile);
 
     // 判断是否存在指定的表
     const sheetExists = workbook.SheetNames.includes(sheetName);
@@ -87,7 +102,7 @@ const cronTask = async function () {
   worksheet['!cols'] = columnWidths;
 
   // 将工作簿写入文件
-  XLSX.writeFile(workbook, ExcelFilePath);
+  XLSX.writeFile(workbook, excelFile);
 
   const hadPushToGithub = await pushToGithubServer(`${sheetName}# 自动生成.`);
   console.log(`git push ${(hadPushToGithub ? "成功" : "失败")}. - ${new Date().toLocaleString()}`);
@@ -99,4 +114,9 @@ const cronTask = async function () {
 // cron.schedule('*/5 * * * *', cronTask);
 
 // [+]立即执行，在Github上利用github actions的schedule去配置定时执行
-cronTask();
+// cronTask();
+
+;;; 
+(async function(){
+  await getProjectSellingDetails();
+})();

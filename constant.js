@@ -1,5 +1,39 @@
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+// import { fileURLToPath } from 'url';
+// import { dirname, resolve } from 'path';
+
+/**
+ *  node index.js byf
+ * [项目名]: [生成的文件名]
+ */
+export const ProjNameMap = {
+  "byf": {
+    fileName: "柏奕府.xlsx",
+    proj_id: 24939,
+    pre_sell_id: 90613,
+    buildingNum: {
+      '4': "43506",
+      '3': "43505",
+      '2': "43504",
+      '1': "43503"
+    }
+  },
+  "hymy": {
+    fileName: "汉园茗院.xlsx",
+    proj_id: 31965,
+    pre_sell_id: 132963,
+    buildingNum: {
+      '4': "43506",
+      '3': "43505",
+      '2': "43504",
+      '1': "43503"
+    }
+  }
+};
+
+export const Columns = [
+  []
+];
+
 /**
  * 字段名和Excel表头显示名映射，最终还是直接用字段名了。
  */
@@ -25,12 +59,6 @@ export const ColumnsDefined = [
   ["color"],
   ["strcontractid"]
 ];
-
-export const ExcelFilePath = resolve((function(){
-  const currentFileUrl = import.meta.url;
-  const currentFilePath = fileURLToPath(currentFileUrl);
-  return dirname(currentFilePath);
-})(), './柏奕府销售表.xlsx');
 
 export const GITHUB_CONFIG = {
   // 如果在github actions 运行环境，用户名密码从环境中读取

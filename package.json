@@ -5,9 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "node index.js byf",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "excel": "node zhuoyue-boyifu/index.js",
-    "push-to-github": "node zhuoyue-boyifu/push-to-github.js"
+    "excel": "node index.js",
+    "push-to-github": "node github.js"
   },
   "author": "",
   "license": "ISC",
