@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js byf",
+    "start": "node index.js hymy",
     "test": "echo \"Error: no test specified\" && exit 1",
     "excel": "node index.js",
     "push-to-github": "node github.js"

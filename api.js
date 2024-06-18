@@ -16,32 +16,42 @@ const URLs = {
   getBlockList : '',
 };
 
+const POST_BODY_CONTENT_TYPE = {
+  FORM: 'application/x-www-form-urlencoded',
+  RAW: 'application/json',
+}
+
 const url_and_settings = {
   // 获取楼栋列表
-  buildingList: {
+  blockList: {
     url: 'http://zjj.sz.gov.cn/szfdcscjy/projectPublish/getBuildingNameListToPublicity',
     method: 'POST',
-    type: 'form'
+    type: POST_BODY_CONTENT_TYPE.FORM,
   },
   // 楼盘指定楼栋的销售情况，注：原始接口区分楼栋，我们在本地遍历楼栋后合并在一起。
   sellingInfo: {
-
+    url: 'http://zjj.sz.gov.cn/szfdcscjy/projectPublish/getHouseInfoListToPublicity',
+    method: 'POST',
+    type: POST_BODY_CONTENT_TYPE.RAW,
   },
-  getSellingInfo : 'http://zjj.sz.gov.cn/szfdcscjy/projectPublish/getHouseInfoListToPublicity',
 }
 
 
 // 基础参数，需要结合下面的楼栋参数才完整
 const BaseParams = {
-  buildingbranch: "",
-  floor: "",
-  // 不同楼栋参数不一样
+  // 项目 ID
+  ysProjectId: 0,
+  // 预售ID
+  preSellId: 0,
+  // 楼栋 ID
   fybId: "", 
+  // 单元
+  buildingbranch: "",
+  // 楼层
+  floor: "",
   housenb: "",
   status: -1,
   type: "",
-  // ysProjectId: 24939,
-  // preSellId: 90613,
 };
 
 // 楼栋序号：分别是四栋、三栋、二栋、一栋
@@ -109,47 +119,93 @@ export async function getProjectSellingDetails(){
   //   .set('Content-Type', 'application/x-www-form-urlencoded');
   // console.log('buildingList:::', buildingList.body, '\r\n\r\n\r\n\r\n\r\n');
   // sleep(2000);
-  const params = Object.assign({}, BaseParams, {
-    ysProjectId: global.projInfo.proj_id,
-    preSellId: global.projInfo.pre_sell_id,
-    fybId: "51414",
-    buildingbranch: "三单元"
-  });
-  console.log('params::::', params);
-  const sellingInfo = await SuperAgent
-    .post(URLs.getSellingInfo)
-    // .send(params)
-    .send(JSON.stringify(params))
-    .set('Content-Type', 'application/json');
-  console.log('selling info:::', sellingInfo.body, '\r\n\r\n\r\n\r\n\r\n');
+  // const params = Object.assign({}, BaseParams, {
+  //   ysProjectId: global.projInfo.proj_id,
+  //   preSellId: global.projInfo.pre_sell_id,
+  //   fybId: "51414",
+  //   // buildingbranch: "三单元"
+  // });
+  // console.log('params::::', params);
+  // const sellingInfo = await SuperAgent
+  //   .post(URLs.getSellingInfo)
+  //   // .send(params)
+  //   .send(JSON.stringify(params))
+  //   .set('Content-Type', 'application/json');
+  // console.log('selling info:::', sellingInfo.body, '\r\n\r\n\r\n\r\n\r\n');
 
-    // )
-    // JSON.stringify(Object.assign({}, BaseParams, ))
-    
+  //   // )
+  //   // JSON.stringify(Object.assign({}, BaseParams, ))
+  
+  // const {url, method, type} = url_and_settings.blockList;
+  const blocks = await getBlockList();
+  console.log('blocks::', blocks);
+  
+  if(!blocks || (Array.isArray(blocks) && blocks.length < 1)){
+    return false;
+  }
+
+  const {url, type} = url_and_settings.sellingInfo;
+  const result = [];
+  blocks.forEach(async block => {
+    const sellInfo = await _post({url, type, params: {fybId: block.key}});
+    const filterItems = sellInfo.map(floorItem =>
+      floorItem.list
+        .filter(house => {
+          return house.useage === "住宅";
+        })
+        // .map(house => {
+        //   let totalAreaSize = house['ysbuildingarea'] * 1;
+        //   let totalPrice = house['askpriceeachB'] * totalAreaSize / 1e4;
+        //   house['useRate'] = (house['ysinsidearea'] / totalAreaSize * 100).toFixed(4) + '%';
+        //   house['totalPrice'] = totalPrice;
+        //   house['discountedPrice'] = totalPrice * (0.99 ** 15).toFixed(4);
+        //   // 面积数值调整
+        //   house['ysbuildingarea'] = (a => {
+        //     return a < 109.5 ? 108 : ( a < 111 ? 110 : ( a < 124 ? 117 : 125 ));
+        //   })(totalAreaSize)
+        //   return house;
+        //   // return _.pick(house, ColumnsDefined.map(item => item[0]));
+        // })
+    );
+    // return sellInfo.flat();
+    result.push(filterItems.flat());
+  });
+  return result.flat();
 }
 
-async function _http(url, method='POST', params={}){
-  const projParams = {
+async function getBlockList (){
+  const {url, type} = url_and_settings.blockList;
+  return await _post({url, type});
+}
+
+async function _post({
+  url,
+  type=POST_BODY_CONTENT_TYPE.FORM,
+  params={},
+}){
+  // url, method='POST', params={}
+  const projConfig = {
     ysProjectId: global.projInfo.proj_id,
     preSellId: global.projInfo.pre_sell_id
   }
-  const finalParams = Object.assign({}, BaseParams, projParams, params);
-  console.log('url and finalParams:', url, finalParams)
-  const response = await SuperAgent.post(url).send(finalParams);
-  console.log('response:', response.headers)
-  const content = response.body;
-  if(content.status === 200){
+  const finalParams = Object.assign({}, BaseParams, projConfig, params);
+  console.log('\r\n\r\nurl / type / finalParams:\r\n', url, '\r\n',type, '\r\n', finalParams, '\r\n');
+
+  let response = null;
+  switch(type){
+    case POST_BODY_CONTENT_TYPE.RAW:
+      response = await SuperAgent.post(url).send(JSON.stringify(finalParams)).set('Content-Type', 'application/json');
+      break;
+    case POST_BODY_CONTENT_TYPE.FORM:
+      response = await SuperAgent.post(url).send(finalParams).set('Content-Type', 'application/x-www-form-urlencoded');
+      break;
+  }
+  const content = response?.body;
+  if(content?.status === 200){
     return content.data;
   }else{
     return {};
   }
-}
-async function _post(url, params={}){
-  return await _http(url, 'POST', params);
-}
-
-async function _get(url, params={}){
-  return await _http(url, 'GET', params);
 }
 
 /**
