@@ -9,7 +9,7 @@ import XLSX from 'xlsx';
 
 import { getAllSellingInfos, getProjectSellingDetails } from './api.js';
 import { getExcelOutputPath } from './util.js';
-import { ProjNameMap, ColumnsDefined } from './constant.js';
+import { ProjNameMap, ExcelColumns } from './constant.js';
 import { pushToGithubServer } from './github.js';
 
 import cron from 'node-cron';
@@ -86,11 +86,12 @@ const cronTask = async function () {
   // 设置表头样式和列宽
   const worksheet = workbook.Sheets[sheetName];
   const headerStyle = { fill: { bgColor: { rgb: 'CCC' } } };
-  const columnWidths = [
-    50/*A:id*/, 10, 50/*C:楼栋*/, 10, 50/*E:楼层*/, 50/*F:房号*/, 100/*G:用途*/, 80/*H:套内*/, 80/*I:公摊*/, 
-    100/*J:建面*/, 0, 1, 5, 100/*N:单价*/,10, 10, 100/*Q:销售状态*/, 20/*R:备案字*/, 100/*S:使用率*/, 100/*T:总价*/,
-    100/*U:86折后价*/
-  ].map(width => ({ wpx: width }));
+  // const columnWidths = [
+  //   50/*A:id*/, 10, 50/*C:楼栋*/, 10, 50/*E:楼层*/, 50/*F:房号*/, 100/*G:用途*/, 80/*H:套内*/, 80/*I:公摊*/, 
+  //   100/*J:建面*/, 0, 1, 5, 100/*N:单价*/,10, 10, 100/*Q:销售状态*/, 20/*R:备案字*/, 100/*S:使用率*/, 100/*T:总价*/,
+  //   100/*U:86折后价*/
+  // ].map(width => ({ wpx: width }));
+  const columnWidths = ExcelColumns.map(column=>column[3]);
   // const columnWidths = new Array(20).fill({ wpx: 120 });
 
   for (const cell in worksheet) {
@@ -114,9 +115,9 @@ const cronTask = async function () {
 // cron.schedule('*/5 * * * *', cronTask);
 
 // [+]立即执行，在Github上利用github actions的schedule去配置定时执行
-// cronTask();
+cronTask();
 
-;;; 
-(async function(){
-  await getProjectSellingDetails();
-})();
+// ;;; 
+// (async function(){
+//   await getProjectSellingDetails();
+// })();

@@ -106,37 +106,6 @@ async function getBuildings(buildingNum){
 }
 
 export async function getProjectSellingDetails(){
-  // const buildingList = await _post(URLs.getBuildingList);
-  // console.log('buildingList:::', buildingList);
-  // const list = await _post(URLs.getSellingInfo, {fybId: "51414"});
-  
-  // const buildingList = await SuperAgent
-  //   .post(URLs.getBuildingList)
-  //   .send(Object.assign({}, BaseParams, {
-  //     ysProjectId: global.projInfo.proj_id,
-  //     preSellId: global.projInfo.pre_sell_id
-  //   }))
-  //   .set('Content-Type', 'application/x-www-form-urlencoded');
-  // console.log('buildingList:::', buildingList.body, '\r\n\r\n\r\n\r\n\r\n');
-  // sleep(2000);
-  // const params = Object.assign({}, BaseParams, {
-  //   ysProjectId: global.projInfo.proj_id,
-  //   preSellId: global.projInfo.pre_sell_id,
-  //   fybId: "51414",
-  //   // buildingbranch: "三单元"
-  // });
-  // console.log('params::::', params);
-  // const sellingInfo = await SuperAgent
-  //   .post(URLs.getSellingInfo)
-  //   // .send(params)
-  //   .send(JSON.stringify(params))
-  //   .set('Content-Type', 'application/json');
-  // console.log('selling info:::', sellingInfo.body, '\r\n\r\n\r\n\r\n\r\n');
-
-  //   // )
-  //   // JSON.stringify(Object.assign({}, BaseParams, ))
-  
-  // const {url, method, type} = url_and_settings.blockList;
   const blocks = await getBlockList();
   console.log('blocks::', blocks);
   
@@ -146,31 +115,64 @@ export async function getProjectSellingDetails(){
 
   const {url, type} = url_and_settings.sellingInfo;
   const result = [];
-  blocks.forEach(async block => {
+  for(const block of blocks){
+    console.log('block...', 111111111)
     const sellInfo = await _post({url, type, params: {fybId: block.key}});
-    const filterItems = sellInfo.map(floorItem =>
-      floorItem.list
-        .filter(house => {
-          return house.useage === "住宅";
-        })
-        // .map(house => {
-        //   let totalAreaSize = house['ysbuildingarea'] * 1;
-        //   let totalPrice = house['askpriceeachB'] * totalAreaSize / 1e4;
-        //   house['useRate'] = (house['ysinsidearea'] / totalAreaSize * 100).toFixed(4) + '%';
-        //   house['totalPrice'] = totalPrice;
-        //   house['discountedPrice'] = totalPrice * (0.99 ** 15).toFixed(4);
-        //   // 面积数值调整
-        //   house['ysbuildingarea'] = (a => {
-        //     return a < 109.5 ? 108 : ( a < 111 ? 110 : ( a < 124 ? 117 : 125 ));
-        //   })(totalAreaSize)
-        //   return house;
-        //   // return _.pick(house, ColumnsDefined.map(item => item[0]));
-        // })
+    console.log('block...', 222222222);
+    const filterItems = sellInfo.map(floorItem => floorItem
+      .list
+      .filter(house => {
+        return house.useage === "住宅";
+      }).map(house => {
+        const {
+          id, buildingName, buildingbranch, floor, ysinsidearea, housenb,
+          ysbuildingarea, askpriceeachB, askpricetotalB, lastStatusName
+        } = house;
+        Object.assign(house, {
+          housenb: housenb.substring(-2),
+          ysinsidearea: Math.ceil(ysinsidearea),
+          ysbuildingarea: Math.ceil(ysbuildingarea),
+          useRate: (ysinsidearea/ysbuildingarea).toFixed(2),
+          askpriceeachB: askpriceeachB/1e4,
+          askpricetotalB: askpricetotalB/1e4
+        });
+        // house.housenb = house.housenb.substring(-2);
+        return house;
+      })
     );
-    // return sellInfo.flat();
+    console.log('-----------\n', filterItems, result, '-----------\n');
     result.push(filterItems.flat());
-  });
+    sleep(1500);
+  }
   return result.flat();
+  // blocks.forEach(async block => {
+  //   console.log('block...')
+  //   const sellInfo = await _post({url, type, params: {fybId: block.key}});
+  //   console.log(1111111111122222222);
+  //   const filterItems = sellInfo.map(floorItem =>
+  //     floorItem.list
+  //       .filter(house => {
+  //         return house.useage === "住宅";
+  //       })
+  //       // .map(house => {
+  //       //   let totalAreaSize = house['ysbuildingarea'] * 1;
+  //       //   let totalPrice = house['askpriceeachB'] * totalAreaSize / 1e4;
+  //       //   house['useRate'] = (house['ysinsidearea'] / totalAreaSize * 100).toFixed(4) + '%';
+  //       //   house['totalPrice'] = totalPrice;
+  //       //   house['discountedPrice'] = totalPrice * (0.99 ** 15).toFixed(4);
+  //       //   // 面积数值调整
+  //       //   house['ysbuildingarea'] = (a => {
+  //       //     return a < 109.5 ? 108 : ( a < 111 ? 110 : ( a < 124 ? 117 : 125 ));
+  //       //   })(totalAreaSize)
+  //       //   return house;
+  //       //   // return _.pick(house, ColumnsDefined.map(item => item[0]));
+  //       // })
+  //   );
+    
+  //   console.log('-----------\n', filterItems, result, '-----------\n');
+  //   result.push(filterItems.flat());
+  // });
+  // return result.flat();
 }
 
 async function getBlockList (){

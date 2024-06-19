@@ -30,8 +30,23 @@ export const ProjNameMap = {
   }
 };
 
-export const Columns = [
-  []
+export const ExcelColumns = [
+  // [field, title, width]
+  ["id", "ID", 50],
+  ["buildingName", "楼栋", 50], 
+  ["buildingbranch", "单元", 80], 
+  ["floor", "楼层", 50], 
+  ["housenb", "户型编号", 50],
+  ["ysinsidearea", "套内面积", 100], 
+  ["ysbuildingarea", "建筑面积", 100], 
+  ["useRate", "利用率", 80],
+  ["askpriceeachB", "折前单价(w)", 100], 
+  ["askpricetotalB", "折前总价(w)", 100], 
+  ["lastStatusName", "状态", 100]
+
+  // 50/*A:id*/, 10, 50/*C:楼栋*/, 10, 50/*E:楼层*/, 50/*F:房号*/, 100/*G:用途*/, 80/*H:套内*/, 80/*I:公摊*/, 
+  //   100/*J:建面*/, 0, 1, 5, 100/*N:单价*/,10, 10, 100/*Q:销售状态*/, 20/*R:备案字*/, 100/*S:使用率*/, 100/*T:总价*/,
+  //   100/*U:86折后价*/
 ];
 
 /**

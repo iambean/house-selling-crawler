@@ -5,12 +5,13 @@ import fs from 'node:fs/promises';
 import { ProjNameMap } from './constant.js'
 import { stat } from 'fs';
 
-export async function getProjName(){
-  if (this._proj) {
-    return this._proj;
+export function getProjName(){
+  const that = getProjName;
+  if (that._proj) {
+    return that._proj;
   } else {
     const proj = process.argv[2] || Object.keys(ProjNameMap)[0];
-    this._proj = proj;
+    that._proj = proj;
     return proj;
   }
   
