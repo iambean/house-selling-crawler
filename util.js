@@ -1,9 +1,8 @@
 import { fileURLToPath } from 'url';
 import { dirname, resolve, join } from 'path';
-// import { access, constants } from 'node:fs/promises';
 import fs from 'node:fs/promises';
+
 import { ProjNameMap } from './constant.js'
-import { stat } from 'fs';
 
 export function getProjName(){
   const that = getProjName;
@@ -14,7 +13,6 @@ export function getProjName(){
     that._proj = proj;
     return proj;
   }
-  
 }
 
 export async function getExcelOutputPath () {
@@ -40,7 +38,6 @@ export async function getExcelOutputPath () {
   
   return outputFilePath;
 }
-
 
 export async function sleep(millisecond){
   // 不允许 sleep 1 分钟以上。

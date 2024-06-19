@@ -9,7 +9,7 @@ import XLSX from 'xlsx';
 
 import { getAllSellingInfos, getProjectSellingDetails } from './api.js';
 import { getExcelOutputPath } from './util.js';
-import { ProjNameMap, ExcelColumns } from './constant.js';
+import { ProjNameMap, Columns } from './constant.js';
 import { pushToGithubServer } from './github.js';
 
 import cron from 'node-cron';
@@ -77,7 +77,12 @@ const cronTask = async function () {
   } else {
     // 创建新的工作簿并写入数据
     workbook = XLSX.utils.book_new();
-    const sheet = XLSX.utils.json_to_sheet(jsonData, { header: Object.keys(jsonData[0]) });
+    const sheet = XLSX.utils.json_to_sheet(jsonData, { 
+      header: (()=>{
+        let nameList = Object.keys(jsonData[0]);
+
+      })()
+    });
     // const sheet = XLSX.utils.json_to_sheet(jsonData, { header: SheetColumns });
     workbook.SheetNames.push(sheetName);
     workbook.Sheets[sheetName] = sheet;
@@ -91,7 +96,7 @@ const cronTask = async function () {
   //   100/*J:建面*/, 0, 1, 5, 100/*N:单价*/,10, 10, 100/*Q:销售状态*/, 20/*R:备案字*/, 100/*S:使用率*/, 100/*T:总价*/,
   //   100/*U:86折后价*/
   // ].map(width => ({ wpx: width }));
-  const columnWidths = ExcelColumns.map(column=>column[3]);
+  const columnWidths = Object.keys(Columns).map(fieldName=>({ wpx: +Columns[fieldName][1] }));
   // const columnWidths = new Array(20).fill({ wpx: 120 });
 
   for (const cell in worksheet) {
