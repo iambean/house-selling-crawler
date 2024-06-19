@@ -68,10 +68,10 @@ export async function getProjectSellingDetails(){
           ysbuildingarea, askpriceeachB, askpricetotalB, lastStatusName
         } = house;
         Object.assign(house, {
-          housenb: housenb.substring(-2),
+          housenb: String(housenb).slice(-2),
           ysinsidearea: Math.ceil(ysinsidearea),
           ysbuildingarea: Math.ceil(ysbuildingarea),
-          useRate: (ysinsidearea/ysbuildingarea).toFixed(2),
+          useRate: Number((ysinsidearea/ysbuildingarea).toFixed(2)),
           askpriceeachB: askpriceeachB/1e4,
           askpricetotalB: askpricetotalB/1e4
         });

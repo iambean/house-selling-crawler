@@ -16,13 +16,13 @@ export const ProjNameMap = {
 
 export const Columns = {
   // field: , title, width]
-  "id": ["ID", 50],
-  "buildingName": ["楼栋", 50], 
+  "id": ["ID", 100],
+  "buildingName": ["楼栋", 80], 
   "buildingbranch": ["单元", 80], 
   "floor": ["楼层", 50], 
   "housenb":["户型编号", 50],
-  "ysinsidearea":["套内面积", 100], 
-  "ysbuildingarea":[ "建筑面积", 100], 
+  "ysbuildingarea":[ "建筑面积(m²)", 100], 
+  "ysinsidearea":["套内面积(m²)", 100], 
   "useRate":[ "利用率", 80],
   "askpriceeachB": ["折前单价(w)", 100], 
   "askpricetotalB": ["折前总价(w)", 100], 

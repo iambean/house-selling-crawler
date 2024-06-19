@@ -41,6 +41,8 @@ const cronTask = async function () {
 
   let workbook;
 
+  const excelHeader = Object.keys(Columns).map(name => Columns[name][0]);
+
   // 判断文件是否存在
   const fileExists = fs.existsSync(excelFile);
 
@@ -63,13 +65,13 @@ const cronTask = async function () {
       }
 
       // 写入数据
-      const sheet = XLSX.utils.json_to_sheet(jsonData, { header: Object.keys(jsonData[0]) });
+      const sheet = XLSX.utils.json_to_sheet(jsonData, { header: excelHeader });
       // const sheet = XLSX.utils.json_to_sheet(jsonData, { header: SheetColumns });
       worksheet['!ref'] = sheet['!ref'];
       Object.assign(worksheet, sheet);
     } else {
       // 不存在指定的表，追加一个新表并写入数据
-      const sheet = XLSX.utils.json_to_sheet(jsonData, { header: Object.keys(jsonData[0]) });
+      const sheet = XLSX.utils.json_to_sheet(jsonData, { header: excelHeader });
       // const sheet = XLSX.utils.json_to_sheet(jsonData, { header: SheetColumns });
       workbook.SheetNames.push(sheetName);
       workbook.Sheets[sheetName] = sheet;
@@ -77,12 +79,7 @@ const cronTask = async function () {
   } else {
     // 创建新的工作簿并写入数据
     workbook = XLSX.utils.book_new();
-    const sheet = XLSX.utils.json_to_sheet(jsonData, { 
-      header: (()=>{
-        let nameList = Object.keys(jsonData[0]);
-
-      })()
-    });
+    const sheet = XLSX.utils.json_to_sheet(jsonData, { header: excelHeader });
     // const sheet = XLSX.utils.json_to_sheet(jsonData, { header: SheetColumns });
     workbook.SheetNames.push(sheetName);
     workbook.Sheets[sheetName] = sheet;
