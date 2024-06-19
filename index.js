@@ -7,7 +7,7 @@ import { dirname } from 'path';
 
 import XLSX from 'xlsx';
 
-import { getAllSellingInfos, getProjectSellingDetails } from './api.js';
+import { getProjectSellingDetails } from './api.js';
 import { getExcelOutputPath } from './util.js';
 import { ProjNameMap, Columns } from './constant.js';
 import { pushToGithubServer } from './github.js';
