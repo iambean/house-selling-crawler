@@ -19,7 +19,7 @@ if(projName && (projName in ProjNameMap)){
   global.projName = projName;
   global.projInfo = ProjNameMap[projName]
 }else{
-  throw new Error('need project name param, e.g: 【node index.js byf】');
+  throw new Error('需要指定项目名。need project name param, e.g: 【node index.js byf】');
 }
 
 // const SheetColumns = ColumnsDefined.map(item => (item[1] ?? item[0]));
@@ -31,6 +31,7 @@ if(projName && (projName in ProjNameMap)){
 const cronTask = async function () {
   // let jsonData = await getAllSellingInfos({});
   let jsonData = await getProjectSellingDetails();
+  const sheet = XLSX.utils.json_to_sheet(jsonData, { header: excelHeader });
 
   const excelFile = await getExcelOutputPath();
   
@@ -63,23 +64,22 @@ const cronTask = async function () {
           delete worksheet[cell];
         }
       }
+      
+      // ws[
+      //   XLSX.utils.encode_cell({ r: 0, c: colIndex })
+      // ] = { t: 's', v: headerMapping[key] };
 
-      // 写入数据
-      const sheet = XLSX.utils.json_to_sheet(jsonData, { header: excelHeader });
-      // const sheet = XLSX.utils.json_to_sheet(jsonData, { header: SheetColumns });
       worksheet['!ref'] = sheet['!ref'];
       Object.assign(worksheet, sheet);
     } else {
-      // 不存在指定的表，追加一个新表并写入数据
-      const sheet = XLSX.utils.json_to_sheet(jsonData, { header: excelHeader });
-      // const sheet = XLSX.utils.json_to_sheet(jsonData, { header: SheetColumns });
+      
       workbook.SheetNames.push(sheetName);
       workbook.Sheets[sheetName] = sheet;
     }
   } else {
     // 创建新的工作簿并写入数据
     workbook = XLSX.utils.book_new();
-    const sheet = XLSX.utils.json_to_sheet(jsonData, { header: excelHeader });
+    
     // const sheet = XLSX.utils.json_to_sheet(jsonData, { header: SheetColumns });
     workbook.SheetNames.push(sheetName);
     workbook.Sheets[sheetName] = sheet;
@@ -88,14 +88,8 @@ const cronTask = async function () {
   // 设置表头样式和列宽
   const worksheet = workbook.Sheets[sheetName];
   const headerStyle = { fill: { bgColor: { rgb: 'CCC' } } };
-  // const columnWidths = [
-  //   50/*A:id*/, 10, 50/*C:楼栋*/, 10, 50/*E:楼层*/, 50/*F:房号*/, 100/*G:用途*/, 80/*H:套内*/, 80/*I:公摊*/, 
-  //   100/*J:建面*/, 0, 1, 5, 100/*N:单价*/,10, 10, 100/*Q:销售状态*/, 20/*R:备案字*/, 100/*S:使用率*/, 100/*T:总价*/,
-  //   100/*U:86折后价*/
-  // ].map(width => ({ wpx: width }));
-  const columnWidths = Object.keys(Columns).map(fieldName=>({ wpx: +Columns[fieldName][1] }));
-  // const columnWidths = new Array(20).fill({ wpx: 120 });
-
+  const columnWidths = Object.keys(Columns).map(fieldName=>({ wpx: Number(Columns[fieldName][1]) }));
+  
   for (const cell in worksheet) {
     if (cell[1] === '1') {
       worksheet[cell].s = headerStyle;

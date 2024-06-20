@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js hymy",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test/1.js",
     "excel": "node index.js",
     "push-to-github": "node github.js"
   },
