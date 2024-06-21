@@ -31,7 +31,8 @@ if(projName && (projName in ProjNameMap)){
 const cronTask = async function () {
   // let jsonData = await getAllSellingInfos({});
   let jsonData = await getProjectSellingDetails();
-  const sheet = XLSX.utils.json_to_sheet(jsonData, { header: excelHeader });
+  // const sheet = XLSX.utils.json_to_sheet(jsonData, { header: excelHeader });
+  const sheet = XLSX.utils.json_to_sheet(jsonData);
 
   const excelFile = await getExcelOutputPath();
   
