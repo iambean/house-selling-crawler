@@ -2,20 +2,41 @@
  * [项目名]: {[生成的文件名], [项目 id], [预售 id]}
  */
 export const ProjNameMap = {
+  "hymy": {
+    fileName: "汉园茗院.xlsx",
+    proj_id: 31965,
+    pre_sell_id: 132963,
+  },
   "byf": {
     fileName: "柏奕府.xlsx",
     proj_id: 24939,
     pre_sell_id: 90613,
   },
-  "hymy": {
-    fileName: "汉园茗院.xlsx",
-    proj_id: 31965,
-    pre_sell_id: 132963,
-  }
+  "boyufu-1": {
+    fileName: "博誉府一期.xlsx",
+    proj_id: 24820,
+    pre_sell_id: 82280,
+  },
+  "boyufu-2": {
+    fileName: "博誉府二期.xlsx",
+    proj_id: 26099,
+    pre_sell_id: 97913,
+  },
+  "yingxi-1": {
+    fileName: "中洲迎喜一期.xlsx",
+    proj_id: 30605,
+    pre_sell_id: 130103,
+  },
+  "yingxi-2": {
+    fileName: "中洲迎喜二期.xlsx",
+    proj_id: 32225,
+    pre_sell_id: 133269,
+  },
+
 };
 
 export const Columns = {
-  // field: , title, width]
+  // field: [title, width]
   "id": ["ID", 100],
   "buildingName": ["楼栋", 80], 
   "buildingbranch": ["单元", 80], 

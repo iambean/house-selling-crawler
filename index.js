@@ -8,22 +8,21 @@ import { dirname } from 'path';
 import XLSX from 'xlsx';
 
 import { getProjectSellingDetails } from './api.js';
-import { getExcelOutputPath } from './util.js';
+import { getExcelOutputPath, getProjName } from './util.js';
 import { ProjNameMap, Columns } from './constant.js';
 import { pushToGithubServer } from './github.js';
 
 import cron from 'node-cron';
 
-const projName = process.argv[2];
+// const projName = process.argv[2];
+console.log('process.argv::',process.argv);
+const projName = getProjName();
 if(projName && (projName in ProjNameMap)){
   global.projName = projName;
   global.projInfo = ProjNameMap[projName]
 }else{
   throw new Error('需要指定项目名。need project name param, e.g: 【node index.js byf】');
 }
-
-// const SheetColumns = ColumnsDefined.map(item => (item[1] ?? item[0]));
-// const SheetColumns = ColumnsDefined.map(item => item[0]);
 
 /**
  * 一个总的exls file，每天一个sheet。
@@ -42,8 +41,6 @@ const cronTask = async function () {
   const sheetName = (new Date()).toLocaleDateString().replaceAll('/', '.');
 
   let workbook;
-
-  const excelHeader = Object.keys(Columns).map(name => Columns[name][0]);
 
   // 判断文件是否存在
   const fileExists = fs.existsSync(excelFile);
@@ -66,15 +63,11 @@ const cronTask = async function () {
         }
       }
       
-      // ws[
-      //   XLSX.utils.encode_cell({ r: 0, c: colIndex })
-      // ] = { t: 's', v: headerMapping[key] };
-
       worksheet['!ref'] = sheet['!ref'];
       Object.assign(worksheet, sheet);
-    } else {
-      
-      workbook.SheetNames.push(sheetName);
+    } else {      
+      // workbook.SheetNames.push(sheetName);
+      workbook.SheetNames.unshift(sheetName);
       workbook.Sheets[sheetName] = sheet;
     }
   } else {
@@ -98,6 +91,14 @@ const cronTask = async function () {
   }
 
   worksheet['!cols'] = columnWidths;
+
+  // set header title
+  Object.keys(jsonData[0]).forEach((name, colIndex) => {
+    worksheet[XLSX.utils.encode_cell({ r: 0, c: colIndex })] = { 
+      t: 's', 
+      v: Columns[name][0]
+    };
+  });
 
   // 将工作簿写入文件
   XLSX.writeFile(workbook, excelFile);
