@@ -23,16 +23,20 @@ export const ProjNameMap = {
     pre_sell_id: 97913,
   },
   "yingxi-1": {
-    fileName: "中洲迎喜一期.xlsx",
+    fileName: "中洲迎玺一期.xlsx",
     proj_id: 30605,
     pre_sell_id: 130103,
   },
   "yingxi-2": {
-    fileName: "中洲迎喜二期.xlsx",
+    fileName: "中洲迎玺二期.xlsx",
     proj_id: 32225,
     pre_sell_id: 133269,
   },
-
+  "yunshanhai": {
+    fileName: "金众云山海.xlsx",
+    proj_id: 31565,
+    pre_sell_id: 131848,
+  }
 };
 
 export const Columns = {
