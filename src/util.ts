@@ -2,7 +2,7 @@ import { fileURLToPath } from 'url';
 import { dirname, resolve, join } from 'path';
 import fs from 'node:fs/promises';
 
-import { ProjNameMap } from './constant.js'
+import { ProjNameMap } from './constant'
 
 export function getProjName(){
   const that = getProjName;
@@ -17,11 +17,11 @@ export function getProjName(){
 
 export async function getExcelOutputPath () {
   const currentFilePath = fileURLToPath(import.meta.url);
-  const rootDir = dirname(currentFilePath);
+  const srcDir = dirname(currentFilePath);
   // const proj = process.argv[2] || Object.keys(ProjNameMap)[0];
   const proj = getProjName();
 
-  const outputDir = join(rootDir, 'output', proj);
+  const outputDir = join(srcDir, '../output', proj);
 
   // 如果目录不存在，则创建一个
   try{

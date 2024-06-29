@@ -3,7 +3,7 @@ import { exec } from 'child_process';
 // import { promisify } from 'util';
 // const execPromise = promisify(exec);
 
-import { GITHUB_CONFIG } from './constant.js'
+import { GITHUB_CONFIG } from './constant'
 
 async function loginAndGetToken () {
   const { Name, Password } = GITHUB_CONFIG;

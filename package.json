@@ -2,11 +2,11 @@
   "name": "house-info",
   "version": "1.0.0",
   "description": "房产信息爬取",
-  "main": "index.js",
+  "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "node index.js hymy",
-    "test": "node test/1.js",
+    "start": "npx tsx src/index.ts",
+    "test": "npx tsx test/2.ts",
     "excel": "node index.js",
     "push-to-github": "node github.js"
   },
@@ -15,12 +15,20 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "node-cron": "^3.0.2",
-    "superagent": "^8.0.9",
+    "superagent": "^9.0.2",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "jslint": "^0.12.1",
+    "@types/lodash": "^4.17.6",
+    "@types/node-cron": "^3.0.11",
+    "@types/superagent": "^8.1.7",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
     "prettier": "^3.3.2",
-    "tslint": "^6.1.3"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.2"
   }
 }

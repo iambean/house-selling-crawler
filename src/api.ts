@@ -2,8 +2,8 @@
 import SuperAgent from "superagent";
 import _ from 'lodash';
 
-import { sleep } from './util.js';
-import { Columns } from "./constant.js";
+import { sleep } from './util';
+import { Columns } from "./constant";
 
 const POST_BODY_CONTENT_TYPE = {
   FORM: 'application/x-www-form-urlencoded',

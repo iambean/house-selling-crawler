@@ -7,10 +7,10 @@ import { dirname } from 'path';
 
 import XLSX from 'xlsx';
 
-import { getProjectSellingDetails } from './api.js';
-import { getExcelOutputPath, getProjName } from './util.js';
-import { ProjNameMap, Columns } from './constant.js';
-import { pushToGithubServer } from './github.js';
+import { getProjectSellingDetails } from './api';
+import { getExcelOutputPath, getProjName } from './util';
+import { ProjNameMap, Columns } from './constant';
+import { pushToGithubServer } from './github';
 
 import cron from 'node-cron';
 
