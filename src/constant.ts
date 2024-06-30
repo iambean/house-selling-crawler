@@ -1,7 +1,13 @@
 /**
  * [项目名]: {[生成的文件名], [项目 id], [预售 id]}
  */
-export const ProjNameMap = {
+interface ProjectInfo {
+  fileName: string;
+  proj_id: number;
+  pre_sell_id: number;
+}
+
+export const ProjNameMap: Record<string, ProjectInfo> = {
   "hymy": {
     fileName: "汉园茗院.xlsx",
     proj_id: 31965,
@@ -39,7 +45,11 @@ export const ProjNameMap = {
   }
 };
 
-export const Columns = {
+type ColumnType = {
+  [key: string]: [string, number];
+};
+
+export const Columns:ColumnType = {
   // field: [title, width]
   "id": ["ID", 100],
   "buildingName": ["楼栋", 80], 
@@ -53,32 +63,6 @@ export const Columns = {
   "askpricetotalB": ["折前总价(w)", 100], 
   "lastStatusName": ["状态", 200],
 }
-
-/**
- * 字段名和Excel表头显示名映射，最终还是直接用字段名了。
- */
-// export const ColumnsDefined = [
-//   ["id"],
-//   ["buildingName", "楼栋号码"],
-//   ["floor", "楼层"],
-//   ["housenb", "房号"],
-//   ["lastStatusName", "销售状态"],
-//   ["ysinsidearea", "室面(㎡)"],
-//   ["ysexpandarea", "公摊(㎡)"],
-//   ["ysbuildingarea", "建面(㎡)"],
-//   ["askpriceeachB", "备案价(万元)"],
-//   ["askpricetotalB", "不知道什么价格(万元)"],
-//   ["totalPrice", "总价(万元)", {"customized": true}],
-//   ["useRate", "利用率", {"customized": true}],
-//   ["sellers"],
-//   ["buildingbranch"],
-//   ["useage", "用途"],
-//   ["jginsidearea"],
-//   ["jgexpandarea"],
-//   ["jgbuildingarea"],
-//   ["color"],
-//   ["strcontractid"]
-// ];
 
 export const GITHUB_CONFIG = {
   // 如果在github actions 运行环境，用户名密码从环境中读取
