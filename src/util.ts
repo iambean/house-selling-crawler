@@ -4,13 +4,13 @@ import fs from 'node:fs/promises';
 
 import { ProjNameMap } from './constant'
 
-export function getProjName(){
-  const that = getProjName;
-  if (that._proj) {
-    return that._proj;
+let __proj:string = '';
+export function getProjName(): string{
+  if (__proj) {
+    return __proj;
   } else {
     const proj = process.argv[2] || Object.keys(ProjNameMap)[0];
-    that._proj = proj;
+    __proj = proj;
     return proj;
   }
 }
@@ -39,12 +39,12 @@ export async function getExcelOutputPath () {
   return outputFilePath;
 }
 
-export async function sleep(millisecond){
+export async function sleep(millisecond: number){
   // 不允许 sleep 1 分钟以上。
   if(millisecond > 60 * 1000){
     throw('sleep time too long.');
   }
-  let t0 = Date.now();
+  const t0 = Date.now();
   while((Date.now() - t0 ) < millisecond){
     continue;
   }
