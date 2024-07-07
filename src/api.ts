@@ -115,7 +115,7 @@ async function _post({
   let response = null;
   switch(type){
     case POST_BODY_CONTENT_TYPE.RAW:
-      response = await SuperAgent.post(url).send(JSON.stringify(finalParams)).set('Content-Type', 'application/json');
+      response = await SuperAgent.post(url).send(JSON.stringify(finalParams)).set('Content-Type', 'application/json; charset=utf-8');
       break;
     case POST_BODY_CONTENT_TYPE.FORM:
       response = await SuperAgent.post(url).send(finalParams).set('Content-Type', 'application/x-www-form-urlencoded');
@@ -125,6 +125,6 @@ async function _post({
   if(content?.status === 200){
     return content.data;
   }else{
-    return {};
+    return [];
   }
 }
