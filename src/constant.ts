@@ -42,6 +42,16 @@ export const ProjNameMap: Record<string, ProjectInfo> = {
     fileName: "金众云山海.xlsx",
     proj_id: 31565,
     pre_sell_id: 131848,
+  },
+  "tianyaofu-2": {
+   fileName: "安宏基.天曜二期.xlsx",
+   proj_id: 29483,
+   pre_sell_id: 127940,
+  },
+  "yuejianhefu": {
+    fileName: "悦见和府.xlsx",
+   proj_id: 31885,
+   pre_sell_id: 132649,
   }
 };
 
